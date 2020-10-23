@@ -223,6 +223,22 @@ function my_filter_head() {
 add_filter( 'gform_tabindex', '__return_false' );
 
 
+// This will be added in WordPress 3.1
+if(!function_exists('wp_dequeue_style')) {
+	function wp_dequeue_style( $handle ) {
+	    global $wp_styles;
+	    if ( !is_a($wp_styles, 'WP_Styles') )
+	        $wp_styles = new WP_Styles();
+
+	    $wp_styles->dequeue( $handle );
+	}
+}
+
+function remove_gravityforms_style() {
+	wp_dequeue_style('gforms_css');
+}
+add_action('wp_print_styles', 'remove_gravityforms_style');
+
 
 //disable scrolling gravity forms
 //add_filter( 'gform_confirmation_anchor', '__return_false' );
